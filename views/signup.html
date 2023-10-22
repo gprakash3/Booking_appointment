@@ -30,7 +30,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script src="app.js"></script>
 <script>
-
     async function addtodb(e) {
         try {
             e.preventDefault();
@@ -39,16 +38,22 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('pswd').value;
 
-            const obj = { name: name, email: email, password: password };
-            const res = await axios.post('http://localhost:3000/user/signup/addUser', obj);
-            console.log(res.data.userdata);
+            let res = await axios.get(`http://localhost:3000/user/login/getData/${email}`);
+            if (res.data.userdata) {
+                alert('User Already exist');
+            }
+            else {
+                const obj = { name: name, email: email, password: password };
+                const res = await axios.post('http://localhost:3000/user/signup/addUser', obj);
+                console.log(res.data.userdata);
+                display.innerHTML='User Signed in successfully'
+            }
         }
         catch (err) {
-            display.innerHTML = `something went wrong`+ `${err}`;
+            display.innerHTML = `something went wrong` + `${err}`;
             console.log(err);
         }
     }
-
 </script>
 
 </html>
