@@ -3,6 +3,9 @@ const User = require('../model/signup');
 const path=require('path');
 const rootDir = require('../util/path');
 
+exports.getLoginPage = (req,res,next) => {
+    res.sendFile(path.join(rootDir, 'views', 'login.html'));
+};
 
 exports.getSignupPage = (req,res,next) => {
     res.sendFile(path.join(rootDir, 'views', 'signup.html'));
@@ -32,6 +35,30 @@ exports.getUserData = async(req,res,next) => {
     console.log(email);
     const userData = await User.findAll({where:{email:email}});
     res.status(201).json({userdata:userData[0]});
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({error:err}); 
+    }
+}
+
+exports.checkLoginDetail = async(req,res,next) => {
+    try{
+        const email =  req.body.email;
+        const password = req.body.password;
+        const userDatas = await User.findAll({where:{email:email}});
+        const userData=userDatas[0];
+        console.log(userData);
+        if(!userData){
+            res.status(404).json({userdata:'User Not found'});
+        }
+        else if(userData.password !==password){
+            res.status(401).json({userdata:'User Not Authorized - Enter Correct Password'});
+        }
+        else{
+            res.status(201).json({userdata:userData});
+        }
+    
     }
     catch(err){
         console.log(err);

@@ -12,6 +12,9 @@
         border-radius: 5%;
         width: 13%;
     }
+    #display{
+        color: red;
+    }
 </style>
 <body>
     <div id="display">
@@ -29,32 +32,27 @@
         New User - 
         <a href="/user/signup">Sign Up</a>
     </div>
+    
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
 
     async function datahandle(e) {
+        try{
         e.preventDefault();
+        const display =document.getElementById('display');
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        let res = await axios.get(`http://localhost:3000/user/login/getData/${email}`);
-        
+        let res = await axios.post(`http://localhost:3000/user/login/check`, {email:email, password:password});
+        display.innerHTML = 'User Successfully logged in';
         console.log(res.data.userdata);
-        
-        if(res.data.userdata){
-        if (res.data.userdata.email !== email) {
-            alert('enter right username');
         }
-        else if (password !== res.data.userdata.password) {
-            
-                alert('enter correct password');
-            }
-            else {
-                display.innerHTML = 'User Logged in';
-            }
-        }
-        else{
-            alert('enter correct data')
+        catch(err){
+            const display =document.getElementById('display');
+            console.log(err);
+            console.log(err.response.data.userdata);
+            display.innerHTML = `${err.response.data.userdata}`;
         }
     }
     
