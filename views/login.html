@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<style>
+    #link{
+        border: 1px solid black;
+        border-radius: 5%;
+        width: 13%;
+    }
+</style>
+<body>
+    <div id="display">
+
+    </div>
+    <div class="forms">
+        <form onsubmit="datahandle(event)">
+            Email:<input type="email" id="email" placeholder="enter your email" required><br>
+            Password:<input type="string" id="password" placeholder="Enter your password here" required><br>
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+    <br>
+    <div id="link">
+        New User - 
+        <a href="/user/signup">Sign Up</a>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+<script>
+
+    async function datahandle(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        let res = await axios.get(`http://localhost:3000/user/login/getData/${email}`);
+        
+        console.log(res.data.userdata);
+        
+        if(res.data.userdata){
+        if (res.data.userdata.email !== email) {
+            alert('enter right username');
+        }
+        else if (password !== res.data.userdata.password) {
+            
+                alert('enter correct password');
+            }
+            else {
+                display.innerHTML = 'User Logged in';
+            }
+        }
+        else{
+            alert('enter correct data')
+        }
+    }
+    
+</script>
+
+</html>
