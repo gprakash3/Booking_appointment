@@ -3,6 +3,8 @@ const User = require('../model/signup');
 const path=require('path');
 const rootDir = require('../util/path');
 
+const bcrypt=require('bcrypt');
+
 exports.getLoginPage = (req,res,next) => {
     res.sendFile(path.join(rootDir, 'views', 'login.html'));
 };
@@ -19,8 +21,13 @@ exports.addUser = async(req,res,next) => {
 
     console.log(name + " " +  email+ " " + password);
 
-    const userdata = await User.create({name:name, email:email, password:password});
-    res.status(201).json({userdata:userdata});
+    //here 10 is saltround
+    bcrypt.hash(password, 10, async(err,hash) => {
+        console.log(err);
+        const userdata = await User.create({name:name, email:email, password:hash});
+        res.status(201).json({userdata:userdata});
+    })
+   
 
     }
     catch(err){
@@ -52,13 +59,16 @@ exports.checkLoginDetail = async(req,res,next) => {
         if(!userData){
             res.status(404).json({userdata:'User Not found'});
         }
-        else if(userData.password !==password){
-            res.status(401).json({userdata:'User Not Authorized - Enter Correct Password'});
-        }
         else{
-            res.status(201).json({userdata:userData});
+            bcrypt.compare(password, userData.password, (err,response) => {
+                if(response ===true){
+                    res.status(201).json({userdata:userData});
+                }
+                else{
+                    res.status(401).json({userdata:'User Not Authorized - Enter Correct Password'});
+                }
+            })
         }
-    
     }
     catch(err){
         console.log(err);
