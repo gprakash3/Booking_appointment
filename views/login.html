@@ -45,8 +45,8 @@
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         let res = await axios.post(`http://localhost:3000/user/login/check`, {email:email, password:password});
-        display.innerHTML = 'User Successfully logged in';
-        console.log(res.data.userdata);
+        display.innerHTML = 'User Successfully logged in'; 
+        window.location.href = "http://localhost:3000/expense";
         }
         catch(err){
             const display =document.getElementById('display');

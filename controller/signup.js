@@ -5,6 +5,10 @@ const rootDir = require('../util/path');
 
 const bcrypt=require('bcrypt');
 
+exports.getExpensePage = (req,res,next) => {
+    res.sendFile(path.join(rootDir, 'views', 'expense.html'));
+}
+
 exports.getLoginPage = (req,res,next) => {
     res.sendFile(path.join(rootDir, 'views', 'login.html'));
 };
@@ -62,7 +66,10 @@ exports.checkLoginDetail = async(req,res,next) => {
         else{
             bcrypt.compare(password, userData.password, (err,response) => {
                 if(response ===true){
-                    res.status(201).json({userdata:userData});
+                    res.redirect('http://localhost:3000/expense');
+                    
+                //    res.status(201).json({userdata:userData});
+                   
                 }
                 else{
                     res.status(401).json({userdata:'User Not Authorized - Enter Correct Password'});

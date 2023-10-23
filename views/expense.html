@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <style>
+        #display {
+            border: 1px solid black;
+            background-color: aliceblue;
+            display: inline-block;
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <form onsubmit="expensedata(event)" class="container">
+        <div class="row">
+            <div class="col">
+                <div class="box">
+                    <label for="amount">Choose Expense Amount:</label>
+                    <input type="text" id="amount" name="amount">
+                    <label for="desc">Choose description:</label>
+                    <input type="text" id="desc" name="desc">
+                    <label for="sel">Choose category:</label>
+                    <select name="sel" id="sel">
+                        <option>Fuel</option>
+                        <option>Food</option>
+                        <option>Electricity</option>
+                        <option>Movie</option>
+                    </select>
+
+                    <input type="submit" id="submitbtn" value="Add Expense">
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div id="display">
+    </div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+<script src="app.js"></script>
+<script>
+ 
+ 
+
+    function expensedata(e) {
+        e.preventDefault();
+        const amount = document.getElementById('amount').value;
+        const description = document.getElementById('desc').value;
+        const category = document.getElementById('sel').value;
+        const obj = { amount: amount, description: description, category: category };
+        const promise = addtodb(obj);
+    }
+
+    async function addtodb(obj) {
+        try {
+                const res = await axios.post('http://localhost:3000/addData', obj);
+                showonscreen(res.data.datas);
+        }
+        catch (err) {
+            console.log('error in adding to db');
+            console.log(err);
+        }
+    }
+
+    function showonscreen(obj) {
+        const div = document.createElement('div');
+        const li = document.createElement('li');
+
+        li.appendChild(document.createTextNode(obj.amount));
+        li.appendChild(document.createTextNode('-'));
+        li.appendChild(document.createTextNode(obj.category));
+        li.appendChild(document.createTextNode('-'));
+        li.appendChild(document.createTextNode(obj.description));
+        
+        const del = document.createElement('button');
+        del.innerHTML = 'DELETE EXPENSE';
+        li.appendChild(del);
+
+       
+        div.appendChild(li);
+        display.appendChild(div);
+
+        del.addEventListener('click', async(e) => {
+            display.removeChild(div);
+            const data = await axios.post('http://localhost:3000/delete', obj);
+            console.log(data);
+        })
+
+       
+
+    }
+
+
+    function fetchdata(obj) {
+        document.getElementById('amount').value = obj.amount;
+        document.getElementById('desc').value = obj.description;
+        document.getElementById('sel').value = obj.category;
+    }
+
+    function creatediv(obj) {
+        const li = document.createElement('li');
+
+        li.appendChild(document.createTextNode(obj.amount));
+        li.appendChild(document.createTextNode('-'));
+        li.appendChild(document.createTextNode(obj.category));
+        li.appendChild(document.createTextNode('-'));
+        li.appendChild(document.createTextNode(obj.description));
+        // li.appendChild(document.createTextNode(obj.amount));
+        const del = document.createElement('button');
+        del.innerHTML = 'DELETE';
+        li.appendChild(del);
+
+       
+        return li;
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const res = await axios.get('http://localhost:3000/getAllData');
+            for (let i = 0; res.data.datas.length; i++) {
+                showonscreen(res.data.datas[i]);
+            }
+        }
+        catch (err) {
+            console.log('error in getting all data');
+            console.log(err);
+        }
+    })
+</script>
+
+</html>
