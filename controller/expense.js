@@ -1,5 +1,6 @@
 
 const Expense = require('../model/data');
+const User = require('../model/signup');
 
 //adding data to database
 exports.postData = async(req,res,next) => {
@@ -49,5 +50,18 @@ exports.postDelete = async (req, res, next) => {
     }
 }
 
+
+//checking if user is premium or not
+exports.checkPremiumUser = async(req,res,next) => {
+    try{
+        const userid=req.user.id;
+       const user = await User.findByPk(userid);
+       res.status(201).json({flag:user.isPremiumUser})
+       
+    }
+    catch(err){
+        console.log(err);
+    }
+}
 
 

@@ -5,6 +5,7 @@ const app=express();
 
 const User = require('./model/signup');
 const Expense = require('./model/data');
+const Order=require('./model/order');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -15,18 +16,24 @@ app.use(cors());
 
 const callRoute=require('./route/expense');
 const signupRoute=require('./route/signup');
+const purchaseRoute = require('./route/purchase');
 
 
 app.use(bodyParser.json({ extended: false }));
 
 app.use(signupRoute);
 app.use(callRoute);
+app.use(purchaseRoute);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
 
+User.hasMany(Order);
+Order.belongsTo(User);
+
 // sequelize.sync({force:true})
 sequelize.sync()
+// sequelize.sync({alter:true})
 .then(result => {
     console.log('app started');
     app.listen(3000);

@@ -19,7 +19,6 @@
             display: inline-block;
             width: 100%;
         }
-
     </style>
 </head>
 
@@ -46,19 +45,56 @@
         </div>
 
     </form>
+    <div id="prembtn">
+        <button type="submit" id="buypremium">Buy Premium</button>
+    </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <div id="display">
     </div>
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
-<script src="app.js"></script>
 <script>
- 
- 
+    const buypremium = document.getElementById('buypremium');
+    buypremium.addEventListener('click', async (e) => {
+        //    const Razorpay = require('razorpay');
+        console.log('clicked');
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        const res = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { "Authorization": token } });
+        console.log('response after getting /purchase/premiummemb.', res);
+        var option = {
+            "key": res.data.key_id,
+            "orderid": res.data.order.id,
+            "handler": async function (response) {
+                await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
+                    order_id: option.orderid,
+                    payment_id: response.razorpay_payment_id,
+                }, { headers: { "Authorization": token } });
+                alert('you are premium user now');
+            }
+        }
+        const rzp1 = new Razorpay(option);
+        rzp1.open();
+        e.preventDefault();
+
+        rzp1.on('payment.failed', function (response) {
+            console.log(response);
+            axios.post('http://localhost:3000/purchase/updatetxnfailed', {
+                order_id: option.orderid,
+                payment_id: 'Failed Payment',
+            }, { headers: { "Authorization": token } });
+            // })
+            alert('something went wrong');
+        })
+
+    })
 
     function expensedata(e) {
         e.preventDefault();
+
+
         const amount = document.getElementById('amount').value;
         const description = document.getElementById('desc').value;
         const category = document.getElementById('sel').value;
@@ -69,8 +105,8 @@
     async function addtodb(obj) {
         try {
             const token = localStorage.getItem('token');
-                const res = await axios.post('http://localhost:3000/addData', obj, {headers:{"Authorization" : token}});
-                showonscreen(res.data.datas);
+            const res = await axios.post('http://localhost:3000/addData', obj, { headers: { "Authorization": token } });
+            showonscreen(res.data.datas);
         }
         catch (err) {
             console.log('error in adding to db');
@@ -87,23 +123,23 @@
         li.appendChild(document.createTextNode(obj.category));
         li.appendChild(document.createTextNode('-'));
         li.appendChild(document.createTextNode(obj.description));
-        
+
         const del = document.createElement('button');
         del.innerHTML = 'DELETE EXPENSE';
         li.appendChild(del);
 
-       
+
         div.appendChild(li);
         display.appendChild(div);
 
-        del.addEventListener('click', async(e) => {
+        del.addEventListener('click', async (e) => {
             display.removeChild(div);
             const token = localStorage.getItem('token');
-            const data = await axios.post('http://localhost:3000/delete', obj, {headers:{"Authorization" : token}});
+            const data = await axios.post('http://localhost:3000/delete', obj, { headers: { "Authorization": token } });
             console.log(data);
         })
 
-       
+
 
     }
 
@@ -127,7 +163,7 @@
         del.innerHTML = 'DELETE';
         li.appendChild(del);
 
-       
+
         return li;
     }
 
@@ -135,7 +171,13 @@
         try {
             const token = localStorage.getItem('token');
             console.log(token);
-            const res = await axios.get('http://localhost:3000/getAllData', {headers:{"Authorization" : token}});
+            const resp = await axios.get('http://localhost:3000/checkpremiumuser', { headers: { "Authorization": token } })
+            if (resp.data.flag === true) {
+                const premdisplay = document.getElementById('prembtn');
+                premdisplay.innerHTML = 'you are premium user';
+            }
+
+            const res = await axios.get('http://localhost:3000/getAllData', { headers: { "Authorization": token } });
             for (let i = 0; res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }

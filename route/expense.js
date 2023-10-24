@@ -7,4 +7,5 @@ const userauth=require('../middleware/auth');
 router.post('/addData' ,userauth.authenticate, expenseController.postData);
 router.post('/delete' ,userauth.authenticate ,expenseController.postDelete);
 router.get('/getAllData',userauth.authenticate, expenseController.getAllData);
+router.get('/checkpremiumuser',userauth.authenticate, expenseController.checkPremiumUser);
 module.exports = router;
