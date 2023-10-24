@@ -1,4 +1,5 @@
 const User = require('../model/signup');
+const jwt=require('jsonwebtoken');
 
 const path=require('path');
 const rootDir = require('../util/path');
@@ -40,6 +41,7 @@ exports.addUser = async(req,res,next) => {
     }
 }
 
+//To check if user already exist during sign up
 exports.getUserData = async(req,res,next) => {
     try{
     const email =  req.params.email;
@@ -53,6 +55,9 @@ exports.getUserData = async(req,res,next) => {
     }
 }
 
+function generateAccessKey(id,name){
+    return jwt.sign({userId:id, name:name},'secretKey');  
+}
 exports.checkLoginDetail = async(req,res,next) => {
     try{
         const email =  req.body.email;
@@ -66,9 +71,12 @@ exports.checkLoginDetail = async(req,res,next) => {
         else{
             bcrypt.compare(password, userData.password, (err,response) => {
                 if(response ===true){
-                    res.redirect('http://localhost:3000/expense');
-                    
-                //    res.status(201).json({userdata:userData});
+                    const x =jwt.sign({userId:userData.id, name:userData.name},'secretKey');
+                    console.log(x);
+                    // localStorage.setItem('token', x);
+                    res.json({token:x})
+                    // generateAccessKey(userData.id, userData.name);
+                    // res.redirect('http://localhost:3000/expense');
                    
                 }
                 else{

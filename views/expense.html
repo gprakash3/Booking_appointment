@@ -68,7 +68,8 @@
 
     async function addtodb(obj) {
         try {
-                const res = await axios.post('http://localhost:3000/addData', obj);
+            const token = localStorage.getItem('token');
+                const res = await axios.post('http://localhost:3000/addData', obj, {headers:{"Authorization" : token}});
                 showonscreen(res.data.datas);
         }
         catch (err) {
@@ -97,7 +98,8 @@
 
         del.addEventListener('click', async(e) => {
             display.removeChild(div);
-            const data = await axios.post('http://localhost:3000/delete', obj);
+            const token = localStorage.getItem('token');
+            const data = await axios.post('http://localhost:3000/delete', obj, {headers:{"Authorization" : token}});
             console.log(data);
         })
 
@@ -131,7 +133,9 @@
 
     window.addEventListener('DOMContentLoaded', async () => {
         try {
-            const res = await axios.get('http://localhost:3000/getAllData');
+            const token = localStorage.getItem('token');
+            console.log(token);
+            const res = await axios.get('http://localhost:3000/getAllData', {headers:{"Authorization" : token}});
             for (let i = 0; res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
