@@ -74,6 +74,7 @@
         </div>
         <div id="leaderboard">
             <p>leaderboard</p>
+            <div id="leaderboardelement"></div>
         </div>
     </div>
 
@@ -103,6 +104,7 @@
                 button.innerHTML = 'show Leaderboard';
                 premdisplay.appendChild(button);
                 button.addEventListener('click', async (e) => {
+                    document.getElementById('leaderboardelement').innerHTML = '';
                     const res = await axios.get('http://localhost:3000/premium/leaderboard');
                     // console.log(res.data);
                     for (let i = 0; i < res.data.datas.length; i++) {
@@ -211,6 +213,7 @@
                 button.innerHTML = 'show Leaderboard';
                 premdisplay.appendChild(button);
                 button.addEventListener('click', async (e) => {
+                    document.getElementById('leaderboardelement').innerHTML = '';
                     const res = await axios.get('http://localhost:3000/premium/leaderboard');
                     // console.log(res.data);
                     for (let i = 0; i < res.data.datas.length; i++) {
@@ -233,13 +236,16 @@
         }
     })
     function showleaderboard(obj) {
+        if(obj.total_cost ===null){
+            obj.total_cost = 0;
+        }
         const li = document.createElement('li');
         li.appendChild(document.createTextNode('Name: '));
         li.appendChild(document.createTextNode(obj.name));
         li.appendChild(document.createTextNode('--'));
         li.appendChild(document.createTextNode('Expense: '))
-        li.appendChild(document.createTextNode(obj.expense));
-        document.getElementById('leaderboard').appendChild(li);
+        li.appendChild(document.createTextNode(obj.total_cost));
+        document.getElementById('leaderboardelement').appendChild(li);
 
     }
 </script>

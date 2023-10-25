@@ -1,29 +1,22 @@
 const Expense = require('../model/data');
 const User = require('../model/signup');
+const sequelize = require('../util/database');
 
-var curobj = []
+
 
 exports.getleaderboarddata = async(req,res,next) => {
     try{
-    const count= await User.count({distinct: true});
-    console.log(count);
-    for(let i=1;i<=count;i++){
-    let totalexpense,username;
-    Expense.findAll({where:{userId:i}}).then(expense => {
-        totalexpense = 0;
-        for(let j=0;j<expense.length;j++)
-        {
-             totalexpense = totalexpense + expense[j].dataValues.amount;
-        }       
-    }).catch(err => console.log(err));
-        
-        const user = await User.findByPk(i);
-        console.log(user.name, totalexpense);
-        
-         curobj = [...curobj, {name:user.name, expense:totalexpense}]
-        }
-         console.log(curobj);
-    res.status(201).json({datas:curobj});
+      const leaderboardExpense = await User.findAll({
+        attributes: ['id', 'name', [sequelize.fn('sum', sequelize.col('expenses.amount')),'total_cost']],
+        include: [{
+            model:Expense,
+            attributes : []
+        }],
+        group:['user.id'],
+        order:[[sequelize.col('total_cost'), 'DESC']]
+      });
+      console.log(leaderboardExpense);
+    res.status(201).json({datas:leaderboardExpense});
     }
     
     
