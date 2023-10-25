@@ -6,6 +6,7 @@ const app=express();
 const User = require('./model/signup');
 const Expense = require('./model/data');
 const Order=require('./model/order');
+const Request = require('./model/ForgotPasswordRequests');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -20,7 +21,6 @@ const purchaseRoute = require('./route/purchase');
 const premiumRoute = require('./route/premium');
 const forgetPasswordRoute =require('./route/passwordretrive');
 
-
 app.use(bodyParser.json({ extended: false }));
 
 app.use(signupRoute);
@@ -34,6 +34,9 @@ Expense.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(Request);
+Request.belongsTo(User);
 
 // sequelize.sync({force:true})
 sequelize.sync()
