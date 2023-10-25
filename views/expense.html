@@ -199,6 +199,7 @@
         return li;
     }
 
+    //on page reload, displaying element according to premium and non premium user
     window.addEventListener('DOMContentLoaded', async () => {
         try {
             const token = localStorage.getItem('token');
@@ -235,16 +236,18 @@
             console.log(err);
         }
     })
+
+    //displaying leaderboard data on screen
     function showleaderboard(obj) {
-        if(obj.total_cost ===null){
-            obj.total_cost = 0;
+        if(obj.totalExpense ===null){
+            obj.totalExpense = 0;
         }
         const li = document.createElement('li');
         li.appendChild(document.createTextNode('Name: '));
         li.appendChild(document.createTextNode(obj.name));
         li.appendChild(document.createTextNode('--'));
         li.appendChild(document.createTextNode('Expense: '))
-        li.appendChild(document.createTextNode(obj.total_cost));
+        li.appendChild(document.createTextNode(obj.totalExpense));
         document.getElementById('leaderboardelement').appendChild(li);
 
     }

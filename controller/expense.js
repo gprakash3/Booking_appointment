@@ -9,8 +9,12 @@ exports.postData = async(req,res,next) => {
     const description= req.body.description;
     const category=req.body.category;
     const userId = req.user.id;
+        const user = await User.findByPk(userId);
+        // console.log(user.dataValues);
+        const totalExpense = await user.update({totalExpense: user.dataValues.totalExpense + +amount});
+        // console.log(totalExpense);
         const datas= await Expense.create({amount:amount, description:description, category:category, userId:userId});
-        res.status(201).json({datas:datas})
+        res.status(201).json({datas:datas, totalExpense:totalExpense});
     }
     catch(err) {
         console.log('error in adding data to db from controller');
@@ -39,9 +43,14 @@ exports.postDelete = async (req, res, next) => {
     try{
         const productid=req.body.id;
         const userid=req.user.id;
+        const user = await User.findByPk(userid);
+        
+
         const deldata= await Expense.findAll({where:{id:productid, userId:userid}});
+        console.log(deldata[0]);
+        const totalExpense = await user.update({totalExpense: user.dataValues.totalExpense - +deldata[0].amount})
         const data = await deldata[0].destroy();
-        res.status(201).json({data:data});
+        res.status(201).json({data:data, totalExpense:totalExpense});
     }
     catch(err){
         console.log('error in deleting in db from controller');
