@@ -18,6 +18,7 @@ const callRoute=require('./route/expense');
 const signupRoute=require('./route/signup');
 const purchaseRoute = require('./route/purchase');
 const premiumRoute = require('./route/premium');
+const forgetPasswordRoute =require('./route/passwordretrive');
 
 
 app.use(bodyParser.json({ extended: false }));
@@ -26,6 +27,7 @@ app.use(signupRoute);
 app.use(callRoute);
 app.use(purchaseRoute);
 app.use(premiumRoute);
+app.use(forgetPasswordRoute);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

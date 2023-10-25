@@ -6,6 +6,10 @@ const rootDir = require('../util/path');
 
 const bcrypt=require('bcrypt');
 
+exports.getForgetPasswordPage = (req,res,next) => {
+    res.sendFile(path.join(rootDir, 'views', 'forgetpassword.html'));
+}
+
 exports.getExpensePage = (req,res,next) => {
     res.sendFile(path.join(rootDir, 'views', 'expense.html'));
 }
