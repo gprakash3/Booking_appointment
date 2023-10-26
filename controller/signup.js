@@ -75,12 +75,11 @@ exports.checkLoginDetail = async(req,res,next) => {
         else{
             bcrypt.compare(password, userData.password, (err,response) => {
                 if(response ===true){
-                    const x =jwt.sign({userId:userData.id, name:userData.name},'secretKey');
+                    const x =jwt.sign({userId:userData.id, name:userData.name, isPremium:userData.isPremiumUser},'secretKey');
                     console.log(x);
-                    // localStorage.setItem('token', x);
+                    
                     res.json({token:x})
-                    // generateAccessKey(userData.id, userData.name);
-                    // res.redirect('http://localhost:3000/expense');
+                    
                    
                 }
                 else{

@@ -96,21 +96,22 @@
                     order_id: option.orderid,
                     payment_id: response.razorpay_payment_id,
                 }, { headers: { "Authorization": token } });
-                const premdisplay = document.getElementById('prembtn');
-                premdisplay.innerHTML = 'you are premium user';
-                const button = document.createElement('button');
-                button.type = 'submit';
-                button.id = 'leaderboardbtn'
-                button.innerHTML = 'show Leaderboard';
-                premdisplay.appendChild(button);
-                button.addEventListener('click', async (e) => {
-                    document.getElementById('leaderboardelement').innerHTML = '';
-                    const res = await axios.get('http://localhost:3000/premium/leaderboard');
-                    // console.log(res.data);
-                    for (let i = 0; i < res.data.datas.length; i++) {
-                        showleaderboard(res.data.datas[i]);
-                    }
-                })
+                location.reload();
+                // const premdisplay = document.getElementById('prembtn');
+                // premdisplay.innerHTML = 'you are premium user';
+                // const button = document.createElement('button');
+                // button.type = 'submit';
+                // button.id = 'leaderboardbtn'
+                // button.innerHTML = 'show Leaderboard';
+                // premdisplay.appendChild(button);
+                // button.addEventListener('click', async (e) => {
+                //     document.getElementById('leaderboardelement').innerHTML = '';
+                //     const res = await axios.get('http://localhost:3000/premium/leaderboard');
+                //     // console.log(res.data);
+                //     for (let i = 0; i < res.data.datas.length; i++) {
+                //         showleaderboard(res.data.datas[i]);
+                //     }
+                // })
                 alert('you are premium user now');
             }
         }
