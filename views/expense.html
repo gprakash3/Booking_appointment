@@ -154,6 +154,7 @@
             </table>
 
         </div>
+        <div id="pagination"></div>
         <button type="submit" id="downloadreport">Download File</button>
         <div id="filesdownload">        </div>
         <div id="downloadfilelinks">        </div>
@@ -164,6 +165,7 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
+    const pagination=document.getElementById('pagination');
     const downloadreportbtn = document.getElementById('downloadreport');
     downloadreportbtn.addEventListener('click', async (e) => {
         try {
@@ -362,17 +364,66 @@
                 document.getElementById('navbar').hidden = true;
                 document.getElementById('leaderboard').hidden = true;
             }
+            const page = 1;
+            const res = await axios.get(`http://localhost:3000/getPageData?page=${page}`, { headers: { "Authorization": token } });
 
-            const res = await axios.get('http://localhost:3000/getAllData', { headers: { "Authorization": token } });
-            for (let i = 0; res.data.datas.length; i++) {
+            // const res = await axios.get('http://localhost:3000/getAllData', { headers: { "Authorization": token } });
+            for (let i = 0; i<res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
+            showpagination(page, res.data.hasNextPage, res.data.nextPage, res.data.hasPreviousPage, res.data.previousPage, res.data.lastPage);
         }
         catch (err) {
             console.log('error in getting all data');
             console.log(err);
         }
-    })
+    });
+
+    async function getExpenses(page){
+        try{
+            const token=localStorage.getItem('token');
+        const res = await axios.get(`http://localhost:3000/getPageData?page=${page}`, { headers: { "Authorization": token } });
+            for (let i = 0; i<res.data.datas.length; i++) {
+                showonscreen(res.data.datas[i]);
+            }
+            showpagination(page, res.data.hasNextPage, res.data.nextPage, res.data.hasPreviousPage, res.data.previousPage, res.data.lastPage);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    function showpagination(currentPage, hasNextPage, nextPage, hasPreviousPage, previousPage, lastPage){
+        const pagination=document.getElementById('pagination');
+        const tbody = document.getElementById('tbodydtde');
+        pagination.innerHTML = '';
+        if(hasPreviousPage){
+            const btn2=document.createElement('button');
+            btn2.innerHTML=previousPage;
+            btn2.addEventListener('click', () => {
+                tbody.innerHTML='';
+                getExpenses(previousPage);
+            });
+            pagination.appendChild(btn2);
+        }
+        const btn1 = document.createElement('button');
+        btn1.innerHTML = currentPage;
+        btn1.addEventListener('click',() => {
+            tbody.innerHTML='';
+            getExpenses(currentPage)
+        });
+        pagination.appendChild(btn1);
+
+        if(hasNextPage){
+            const btn3 = document.createElement('button');
+            btn3.innerHTML=nextPage;
+            btn3.addEventListener('click',() => {
+                tbody.innerHTML='';
+                getExpenses(nextPage)
+            });
+            pagination.appendChild(btn3);
+        }
+    }
 
     //displaying leaderboard data on screen
     function showleaderboard(obj) {

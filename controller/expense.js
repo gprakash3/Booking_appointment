@@ -76,4 +76,17 @@ exports.checkPremiumUser = async (req, res, next) => {
     }
 }
 
+exports.getExpenses = async(req,res,next) => {
+    try{
+        const page = +req.query.page || 1;
+        const count=await Expense.count({where: { userId: req.user.id }});
+        const datas = await Expense.findAll({ where: { userId: req.user.id }, offset:(page-1)*5, limit:5 });
+        res.status(201).json({datas:datas, currentPage:page, hasNextPage:5*page<count,nextPage:page+1, hasPreviousPage:page>1, previousPage:page-1, lastPage: Math.ceil(count/5)});
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({error:err});
+    }
+}
+
 
