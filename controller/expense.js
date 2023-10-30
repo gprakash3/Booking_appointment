@@ -11,9 +11,10 @@ exports.postData = async (req, res, next) => {
         const description = req.body.description;
         const category = req.body.category;
         const userId = req.user.id;
+        const date = new Date();
         const user = await User.findByPk(userId);
         const totalExpense = await user.update({ totalExpense: user.dataValues.totalExpense + +amount }, { transaction: t });
-        const datas = await Expense.create({ amount: amount, description: description, category: category, userId: userId }, { transaction: t });
+        const datas = await Expense.create({ amount: amount, description: description, category: category, userId: userId, date:date }, { transaction: t });
         const p = await t.commit();
         res.status(201).json({ datas: datas, totalExpense: totalExpense });
     }
@@ -68,7 +69,7 @@ exports.checkPremiumUser = async (req, res, next) => {
     try {
         const userid = req.user.id;
         const user = await User.findByPk(userid);
-        res.status(201).json({ flag: user.isPremiumUser })
+        res.status(201).json({ flag: user.isPremiumUser, name: user.name })
     }
     catch (err) {
         console.log(err);

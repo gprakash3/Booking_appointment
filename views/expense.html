@@ -5,130 +5,190 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense tracker</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/form.css">
+    <link rel="stylesheet" href="/table.css">
     <style>
-        #display {
-            border: 1px solid black;
-            background-color: aliceblue;
-            display: inline-block;
+        .container {
+            display: inline-flex;
+            background-color: #e0ecf5;
             width: 100%;
+        }
+
+        #prembtn {
+            padding: 1px 14px;
+        }
+
+        #prembtn btn {
+            /* border: 1px solid black; */
+            border-radius: 5px;
+        }
+
+        #currentUser {
+            position: absolute;
+            right: 20px;
+            text-align: center;
+        }
+
+        .expenseform {
+            margin: 13px 77px;
+            padding: 9px 8px;
+            border: 1px solid black;
+            display: inline-block;
+            text-align: center;
+            width: 28%;
+            background-clip: content-box;
+            background-color: #d6f3a9;
+            border-radius: 5px;
         }
 
         #dataarea {
             display: flex;
-            background-color: aliceblue;
+            flex-direction: column;
+            background-color: rgb(241, 244, 247);
             margin: 10px;
             border: 1px solid black;
+            border-radius: 5px;
             text-align: center;
         }
 
+        /* #leaderboard {} */
+
         #display {
-            width: 50%;
+            width: 92%;
             margin: 10px 10px;
+            padding: 10px 15px
         }
 
         #leaderboard {
-            width: 50%;
+            width: 92%;
             margin: 10px 10px;
+            padding: 10px 15px
         }
+
+        #navbar {
+            margin: 1px 164px;
+            list-style: none;
+        }
+
+        #navbar button {
+            display: inline-block;
+            font-size: 14px;
+            border: none;
+            margin: 1px 10px;
+        }
+
+        /* #navbar li a {
+            color: rgb(26, 10, 121);
+            text-decoration: none;
+            margin: 1px 10px;
+        } */
     </style>
 </head>
 
 <body>
-    <form onsubmit="expensedata(event)" class="container">
-        <div class="row">
-            <div class="col">
-                <div class="box">
-                    <label for="amount">Choose Expense Amount:</label>
-                    <input type="text" id="amount" name="amount">
-                    <label for="desc">Choose description:</label>
-                    <input type="text" id="desc" name="desc">
-                    <label for="sel">Choose category:</label>
-                    <select name="sel" id="sel">
-                        <option>Fuel</option>
-                        <option>Food</option>
-                        <option>Electricity</option>
-                        <option>Movie</option>
-                    </select>
+    <div class="container">
+        <div id="prembtn">
+            <!-- you are not premium user:
+            <button type="submit" id="buypremium">Buy Premium</button> -->
 
-                    <input type="submit" id="submitbtn" value="Add Expense">
-                </div>
+        </div>
+        <div class="mid">
+            <div id="navbar">
+                <!-- <li><a href="http://localhost:3000/premium/dailyreport">Daily Expense Report</a> </li>
+                <li><a href="http://localhost:3000/premium/weeklyreport">Weekly expense report</a> </li>
+                <li><a href="http://localhost:3000/premium/monthlyReport">Monthly Expense report</a> </li> -->
+                <!-- <button type="submit" id="dailyReport">Daily Report</button>
+                <button type="submit" id="weeklyReport">Weekly Report</button>
+                <button type="submit" id="monthlyReport">Monthly Report</button> -->
+
             </div>
         </div>
+        <div id="currentUser">
 
-    </form>
-    <div id="prembtn">
-        <button type="submit" id="buypremium">Buy Premium</button>
+        </div>
+    </div>
+    <div class="expenseform">
+        <form onsubmit="expensedata(event)">
+            <div class="row">
+                <div class="col">
+                    <div class="box">
+                        <label class="forms" for="amount">Expense Amount:</label>
+                        <input class="forms" type="text" id="amount" name="amount"><br>
+                        <label class="forms" for="desc">Description:</label>
+                        <input class="forms" type="text" id="desc" name="desc"><br>
+                        <label class="forms" for="sel">Choose category:</label>
+                        <select name="sel" id="sel">
+                            <option>Fuel</option>
+                            <option>Food</option>
+                            <option>Electricity</option>
+                            <option>Movie</option>
+                        </select>
+
+                        <input type="submit" id="submitbtn" value="Add Expense">
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <div id="dataarea">
         <div id="display">
-            <p>Expense</p>
+            <h1>Expense</h1>
+            <table border="2" width="100%" id="daytodayexpense">
+                <col style="width:40%">
+                <col style="width:25%">
+                <col style="width:25%">
+                <col style="width:10%">
+                <thead>
+                    <tr>
+                        <th>description</th>
+                        <th>category</th>
+                        <th>Expenses</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodydtde">
+
+                </tbody>
+            </table>
+
         </div>
+        <button type="submit" id="downloadreport">Download File</button>
+        <div id="filesdownload">        </div>
+        <div id="downloadfilelinks">        </div>
         <div id="leaderboard">
-            <p>leaderboard</p>
-            <div id="leaderboardelement"></div>
         </div>
     </div>
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
-    const buypremium = document.getElementById('buypremium');
-    buypremium.addEventListener('click', async (e) => {
-        console.log('clicked');
-        e.preventDefault();
-        const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { "Authorization": token } });
-        console.log('response after getting /purchase/premiummemb.', res);
-        var option = {
-            "key": res.data.key_id,
-            "orderid": res.data.order.id,
-            "handler": async function (response) {
-                await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
-                    order_id: option.orderid,
-                    payment_id: response.razorpay_payment_id,
-                }, { headers: { "Authorization": token } });
-                location.reload();
-                // const premdisplay = document.getElementById('prembtn');
-                // premdisplay.innerHTML = 'you are premium user';
-                // const button = document.createElement('button');
-                // button.type = 'submit';
-                // button.id = 'leaderboardbtn'
-                // button.innerHTML = 'show Leaderboard';
-                // premdisplay.appendChild(button);
-                // button.addEventListener('click', async (e) => {
-                //     document.getElementById('leaderboardelement').innerHTML = '';
-                //     const res = await axios.get('http://localhost:3000/premium/leaderboard');
-                //     // console.log(res.data);
-                //     for (let i = 0; i < res.data.datas.length; i++) {
-                //         showleaderboard(res.data.datas[i]);
-                //     }
-                // })
-                alert('you are premium user now');
+    const downloadreportbtn = document.getElementById('downloadreport');
+    downloadreportbtn.addEventListener('click', async (e) => {
+        try {
+            e.preventDefault();
+            console.log('clicked');
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:3000/download', { headers: { "Authorization": token } });
+            console.log('response when clicked download file', res);
+            if (res.status === 200) {
+
+                const resp = await axios.post('http://localhost:3000/postLink', { link: res.data.fileUrl }, { headers: { "Authorization": token } });
+                console.log(resp);
+                var a = document.createElement('a');
+                a.href = res.data.fileUrl;
+                a.download = 'myexpense.csv';
+                a.click();
+                window.location.reload();
+            }
+            else {
+                throw new Error(res.data.message);
             }
         }
-        const rzp1 = new Razorpay(option);
-        rzp1.open();
-        e.preventDefault();
-
-        rzp1.on('payment.failed', function (response) {
-            console.log(response);
-            axios.post('http://localhost:3000/purchase/updatetxnfailed', {
-                order_id: option.orderid,
-                payment_id: 'Failed Payment',
-            }, { headers: { "Authorization": token } });
-            // })
-            alert('something went wrong');
-        })
-
+        catch (err) {
+            console.log(err);
+        }
     })
 
     function expensedata(e) {
@@ -155,21 +215,29 @@
     }
 
     function showonscreen(obj) {
-        const div = document.createElement('div');
-        const li = document.createElement('li');
-
-        li.appendChild(document.createTextNode(obj.amount));
-        li.appendChild(document.createTextNode('-'));
-        li.appendChild(document.createTextNode(obj.category));
-        li.appendChild(document.createTextNode('-'));
-        li.appendChild(document.createTextNode(obj.description));
+        const tbody = document.getElementById('tbodydtde');
+        const row = document.createElement("tr");
+        const cell1 = document.createElement("td");
+        const cellText1 = document.createTextNode(obj.description);
+        cell1.appendChild(cellText1);
+        const cell2 = document.createElement("td");
+        const cellText2 = document.createTextNode(obj.category);
+        cell2.appendChild(cellText2);
+        const cell3 = document.createElement("td");
+        const cellText3 = document.createTextNode(obj.amount);
+        cell3.appendChild(cellText3);
         const del = document.createElement('button');
-        del.innerHTML = 'DELETE EXPENSE';
-        li.appendChild(del);
-        div.appendChild(li);
-        display.appendChild(div);
+        del.style.backgroundColor = 'red';
+        del.innerHTML = 'x';
+        const cell4 = document.createElement("td");
+        cell4.appendChild(del);
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        row.appendChild(cell3);
+        row.appendChild(cell4);
+        tbody.appendChild(row);
         del.addEventListener('click', async (e) => {
-            display.removeChild(div);
+            tbody.removeChild(row);
             const token = localStorage.getItem('token');
             const data = await axios.post('http://localhost:3000/delete', obj, { headers: { "Authorization": token } });
             console.log(data);
@@ -183,47 +251,115 @@
         document.getElementById('sel').value = obj.category;
     }
 
-    function creatediv(obj) {
-        const li = document.createElement('li');
-
-        li.appendChild(document.createTextNode(obj.amount));
-        li.appendChild(document.createTextNode('-'));
-        li.appendChild(document.createTextNode(obj.category));
-        li.appendChild(document.createTextNode('-'));
-        li.appendChild(document.createTextNode(obj.description));
-        // li.appendChild(document.createTextNode(obj.amount));
-        const del = document.createElement('button');
-        del.innerHTML = 'DELETE';
-        li.appendChild(del);
-
-
-        return li;
-    }
-
     //on page reload, displaying element according to premium and non premium user
     window.addEventListener('DOMContentLoaded', async () => {
         try {
             const token = localStorage.getItem('token');
             console.log(token);
             const resp = await axios.get('http://localhost:3000/checkpremiumuser', { headers: { "Authorization": token } })
+            const currentUser = document.getElementById('currentUser');
+            currentUser.appendChild(document.createTextNode('Logged in as:'));
+            currentUser.appendChild(document.createTextNode('\u00A0'));
+            currentUser.appendChild(document.createTextNode(resp.data.name));
             if (resp.data.flag === true) {
                 const premdisplay = document.getElementById('prembtn');
                 premdisplay.innerHTML = 'you are premium user';
+                premdisplay.appendChild(document.createTextNode('\u00A0\u00A0'));
                 const button = document.createElement('button');
                 button.id = 'leaderboardbtn'
                 button.type = 'submit';
                 button.innerHTML = 'show Leaderboard';
                 premdisplay.appendChild(button);
                 button.addEventListener('click', async (e) => {
-                    document.getElementById('leaderboardelement').innerHTML = '';
+                    // document.getElementById('leaderboard').innerHTML = '';
+                    document.getElementById('leaderboard').innerHTML = `<h1>leaderboard</h1>
+            <table border="2" width="100%" id="leaderboardelement">
+                <col style="width:60%">
+                <col style="width:40%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Total Expense</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyleaderboard">
+
+                </tbody>
+            </table>`;
+                    // document.getElementById('tbodyleaderboard').innerHTML = '';
                     const res = await axios.get('http://localhost:3000/premium/leaderboard');
                     // console.log(res.data);
                     for (let i = 0; i < res.data.datas.length; i++) {
                         showleaderboard(res.data.datas[i]);
                     }
+                });
+                document.getElementById('navbar').innerHTML = `<button type="submit" id="dailyReport">Daily Report</button>
+                <button type="submit" id="weeklyReport">Weekly Report</button>
+                <button type="submit" id="monthlyReport">Monthly Report</button>`;
+
+                const dailyReportbtn = document.getElementById('dailyReport');
+                dailyReportbtn.addEventListener('click', async (e) => {
+                    window.location.href = "http://localhost:3000/getdailyreportpage";
+                });
+                const weeklyreportbtn = document.getElementById('weeklyReport');
+                weeklyreportbtn.addEventListener('click', (e) => {
+                    window.location.href = 'http://localhost:3000/getweeklyreportpage';
                 })
+                const mothlyreportbtn = document.getElementById('monthlyReport');
+                mothlyreportbtn.addEventListener('click', (e) => {
+                    window.location.href = 'http://localhost:3000/getmonthlyreportpage';
+                })
+                document.getElementById('filesdownload').appendChild(document.createTextNode(`Download History: you can download again these files`));
+
+                downloadolderversionfile();
             }
             else {
+                downloadreportbtn.disabled = true;
+                const premdisplay = document.getElementById('prembtn');
+                premdisplay.innerHTML = 'you are not premium user';
+                premdisplay.appendChild(document.createTextNode('\u00A0\u00A0'));
+                const button = document.createElement('button');
+                button.id = 'buypremium'
+                button.type = 'submit';
+                button.innerHTML = 'Buy Premium';
+                premdisplay.appendChild(button);
+
+                const buypremium = document.getElementById('buypremium');
+                buypremium.addEventListener('click', async (e) => {
+                    console.log('clicked');
+                    e.preventDefault();
+                    const token = localStorage.getItem('token');
+                    const res = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { "Authorization": token } });
+                    console.log('response after getting /purchase/premiummemb.', res);
+                    var option = {
+                        "key": res.data.key_id,
+                        "orderid": res.data.order.id,
+                        "handler": async function (response) {
+                            await axios.post('http://localhost:3000/purchase/updatetransactionstatus', {
+                                order_id: option.orderid,
+                                payment_id: response.razorpay_payment_id,
+                            }, { headers: { "Authorization": token } });
+                            location.reload();
+                            alert('you are premium user now');
+                        }
+                    }
+                    const rzp1 = new Razorpay(option);
+                    rzp1.open();
+                    e.preventDefault();
+
+                    rzp1.on('payment.failed', function (response) {
+                        console.log(response);
+                        axios.post('http://localhost:3000/purchase/updatetxnfailed', {
+                            order_id: option.orderid,
+                            payment_id: 'Failed Payment',
+                        }, { headers: { "Authorization": token } });
+                        // })
+                        alert('something went wrong');
+                    })
+
+                })
+
+                document.getElementById('navbar').hidden = true;
                 document.getElementById('leaderboard').hidden = true;
             }
 
@@ -240,17 +376,38 @@
 
     //displaying leaderboard data on screen
     function showleaderboard(obj) {
-        if(obj.totalExpense ===null){
+        if (obj.totalExpense === null) {
             obj.totalExpense = 0;
         }
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode('Name: '));
-        li.appendChild(document.createTextNode(obj.name));
-        li.appendChild(document.createTextNode('--'));
-        li.appendChild(document.createTextNode('Expense: '))
-        li.appendChild(document.createTextNode(obj.totalExpense));
-        document.getElementById('leaderboardelement').appendChild(li);
 
+        const tbody = document.getElementById('tbodyleaderboard');
+        const row = document.createElement("tr");
+        const cell1 = document.createElement("td");
+        const cellText1 = document.createTextNode(obj.name);
+        cell1.appendChild(cellText1);
+        const cell2 = document.createElement("td");
+        const cellText2 = document.createTextNode(obj.totalExpense);
+        cell2.appendChild(cellText2);
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        tbody.appendChild(row);
+    }
+
+    async function downloadolderversionfile() {
+        try {
+            const token = localStorage.getItem('token');
+            const fileslinks = document.getElementById('downloadfilelinks');
+            const res = await axios.get('http://localhost:3000/getFileLinks', { headers: { "Authorization": token } });
+            console.log(res.data);
+            if (res.data.alllinks.length > 0) {
+                for (let i = 0; i < res.data.alllinks.length; i++) {
+                    fileslinks.innerHTML += `<a  href=${res.data.alllinks[i].link}>version${i}</a><br>`;
+                }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 </script>
 
