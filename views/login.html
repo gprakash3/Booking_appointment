@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="/form.css">
 
 <head>
     <meta charset="UTF-8">
@@ -7,16 +8,45 @@
     <title>Login</title>
 </head>
 <style>
-    #link{
-        border: 1px solid black;
-        border-radius: 5%;
-        width: 13%;
+    a {
+        text-decoration: none;
+        color: rgb(212, 74, 19);
+
     }
-    #display{
+
+    a:hover {
+        color: rgb(109, 41, 14);
+    }
+
+    #link {
+        border: 1px solid black;
+        border-radius: 3px;
+        width: 100%;
+        text-align: center
+    }
+
+    #display {
         color: red;
+        text-transform: capitalize;
+    }
+
+    .refbtn {
+        display: inline;
+        width: 100%;
+        margin: 0rem 2rem;
+
+    }
+
+    #forgotlink {
+        width: 100%;
+        text-align: center;
+        border: 1px solid black;
+        border-radius: 3px;
     }
 </style>
+
 <body>
+    <h1 style="text-align: center;">Login Page</h1>
     <div id="display">
 
     </div>
@@ -28,38 +58,40 @@
         </form>
     </div>
     <br>
-    <div class="refbtn"></div>
-    <div id="link">
-        New User - 
-        <a href="/user/signup">Sign Up</a>
+    <div class="refbtn">
+        <div id="link">
+            New User - click here to sign Up
+            <a href="/user/signup">Sign Up</a>
+        </div>
+        <div id="forgotlink">
+            click here to retrieve your password -
+            <a href="/getForgetPasswordPage">Forget Password</a>
+        </div>
     </div>
-    <div id="forgotlink">
-        <a href="/getForgetPasswordPage">Forget Password</a>
-    </div>
-    
+
+
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
     async function datahandle(e) {
-        try{
-        e.preventDefault();
-        const display =document.getElementById('display');
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        let res = await axios.post(`http://localhost:3000/user/login/check`, {email:email, password:password});
-        display.innerHTML = 'User Successfully logged in'; 
-        localStorage.setItem('token', res.data.token);
-        window.location.href = "http://localhost:3000/expense";
+        try {
+            e.preventDefault();
+            const display = document.getElementById('display');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            let res = await axios.post(`http://localhost:3000/user/login/check`, { email: email, password: password });
+            display.innerHTML = 'User Successfully logged in';
+            localStorage.setItem('token', res.data.token);
+            window.location.href = "http://localhost:3000/expense";
         }
-        catch(err){
-            const display =document.getElementById('display');
+        catch (err) {
+            const display = document.getElementById('display');
             console.log(err);
             console.log(err.response.data.userdata);
             display.innerHTML = `${err.response.data.userdata}`;
         }
     }
-    
+
 </script>
 
 </html>

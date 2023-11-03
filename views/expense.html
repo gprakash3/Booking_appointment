@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense tracker</title>
-    <link rel="stylesheet" href="/form.css">
+    <!-- <link rel="stylesheet" href="/form.css"> -->
     <link rel="stylesheet" href="/table.css">
     <style>
         .container {
@@ -133,6 +133,16 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <div id="dataarea">
+        <div id="selectePP" style="position: absolute; right: 2rem;">
+            select Number of Expense Per Page
+            <select name="ePP" id="ePP">
+                <option>5</option>
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+                <option>100</option>
+            </select>
+        </div>
         <div id="display">
             <h1>Expense</h1>
             <table border="2" width="100%" id="daytodayexpense">
@@ -154,10 +164,12 @@
             </table>
 
         </div>
-        <div id="pagination"></div>
-        <button type="submit" id="downloadreport">Download File</button>
-        <div id="filesdownload">        </div>
-        <div id="downloadfilelinks">        </div>
+        <div id="pagination">
+            
+        </div>
+        <button type="submit" id="downloadreport" style="margin: 2rem;">Download File</button>
+        <div id="filesdownload"> </div>
+        <div id="downloadfilelinks"> </div>
         <div id="leaderboard">
         </div>
     </div>
@@ -165,8 +177,15 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
-    const pagination=document.getElementById('pagination');
+    const pagination = document.getElementById('pagination');
     const downloadreportbtn = document.getElementById('downloadreport');
+
+    document.getElementById('ePP').addEventListener('click', () => {
+        const expensePerPage = document.getElementById('ePP').value;
+    localStorage.setItem('expenseperpage', expensePerPage);
+    })
+    
+
     downloadreportbtn.addEventListener('click', async (e) => {
         try {
             e.preventDefault();
@@ -195,8 +214,6 @@
 
     function expensedata(e) {
         e.preventDefault();
-
-
         const amount = document.getElementById('amount').value;
         const description = document.getElementById('desc').value;
         const category = document.getElementById('sel').value;
@@ -256,8 +273,9 @@
     //on page reload, displaying element according to premium and non premium user
     window.addEventListener('DOMContentLoaded', async () => {
         try {
+            const ePP = localStorage.getItem('expenseperpage');
             const token = localStorage.getItem('token');
-            console.log(token);
+            // console.log('token from html page is',token);
             const resp = await axios.get('http://localhost:3000/checkpremiumuser', { headers: { "Authorization": token } })
             const currentUser = document.getElementById('currentUser');
             currentUser.appendChild(document.createTextNode('Logged in as:'));
@@ -364,11 +382,19 @@
                 document.getElementById('navbar').hidden = true;
                 document.getElementById('leaderboard').hidden = true;
             }
+
+            // if(document.getElementById('tbodydtde').children.length ==0){
+            //     document.getElementById('tbodydtde').innerHTML = 'No Data to display';
+            // }
+            //displaying number as selected before
+            document.getElementById('ePP').value =ePP;
+
+            //getting data as per page and numner of record per page
             const page = 1;
-            const res = await axios.get(`http://localhost:3000/getPageData?page=${page}`, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://localhost:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
 
             // const res = await axios.get('http://localhost:3000/getAllData', { headers: { "Authorization": token } });
-            for (let i = 0; i<res.data.datas.length; i++) {
+            for (let i = 0; i < res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
             showpagination(page, res.data.hasNextPage, res.data.nextPage, res.data.hasPreviousPage, res.data.previousPage, res.data.lastPage);
@@ -379,46 +405,47 @@
         }
     });
 
-    async function getExpenses(page){
-        try{
-            const token=localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:3000/getPageData?page=${page}`, { headers: { "Authorization": token } });
-            for (let i = 0; i<res.data.datas.length; i++) {
+    async function getExpenses(page) {
+        try {
+            const ePP = localStorage.getItem('expenseperpage');
+            const token = localStorage.getItem('token');
+            const res = await axios.post(`http://localhost:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
+            for (let i = 0; i < res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
             showpagination(page, res.data.hasNextPage, res.data.nextPage, res.data.hasPreviousPage, res.data.previousPage, res.data.lastPage);
         }
-        catch(err){
+        catch (err) {
             console.log(err);
         }
     }
 
-    function showpagination(currentPage, hasNextPage, nextPage, hasPreviousPage, previousPage, lastPage){
-        const pagination=document.getElementById('pagination');
+    function showpagination(currentPage, hasNextPage, nextPage, hasPreviousPage, previousPage, lastPage) {
+        const pagination = document.getElementById('pagination');
         const tbody = document.getElementById('tbodydtde');
         pagination.innerHTML = '';
-        if(hasPreviousPage){
-            const btn2=document.createElement('button');
-            btn2.innerHTML=previousPage;
+        if (hasPreviousPage) {
+            const btn2 = document.createElement('button');
+            btn2.innerHTML = previousPage;
             btn2.addEventListener('click', () => {
-                tbody.innerHTML='';
+                tbody.innerHTML = '';
                 getExpenses(previousPage);
             });
             pagination.appendChild(btn2);
         }
         const btn1 = document.createElement('button');
         btn1.innerHTML = currentPage;
-        btn1.addEventListener('click',() => {
-            tbody.innerHTML='';
+        btn1.addEventListener('click', () => {
+            tbody.innerHTML = '';
             getExpenses(currentPage)
         });
         pagination.appendChild(btn1);
 
-        if(hasNextPage){
+        if (hasNextPage) {
             const btn3 = document.createElement('button');
-            btn3.innerHTML=nextPage;
-            btn3.addEventListener('click',() => {
-                tbody.innerHTML='';
+            btn3.innerHTML = nextPage;
+            btn3.addEventListener('click', () => {
+                tbody.innerHTML = '';
                 getExpenses(nextPage)
             });
             pagination.appendChild(btn3);
