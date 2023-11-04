@@ -64,9 +64,9 @@ exports.sendEmail = async (req, res, next) => {
 
         const client = Sib.ApiClient.instance;
         const apiKey = client.authentications['api-key'];
-        // apiKey.apiKey = process.env.API_KEY;
+        console.log(process.env);
         console.log(process.env.API_KEY);
-        apiKey.apiKey ='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';
+        apiKey.apiKey =process.env.API_KEY;
 
         const transEmailApi = new Sib.TransactionalEmailsApi();
 

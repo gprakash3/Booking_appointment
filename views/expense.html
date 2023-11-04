@@ -177,6 +177,7 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
+    const inline=1;
     const pagination = document.getElementById('pagination');
     const downloadreportbtn = document.getElementById('downloadreport');
 
@@ -197,11 +198,11 @@
 
                 const resp = await axios.post('http://localhost:3000/postLink', { link: res.data.fileUrl }, { headers: { "Authorization": token } });
                 console.log(resp);
-                var a = document.createElement('a');
+                 var a = document.createElement('a');
                 a.href = res.data.fileUrl;
                 a.download = 'myexpense.csv';
                 a.click();
-                window.location.reload();
+                // window.location.reload();
             }
             else {
                 throw new Error(res.data.message);
