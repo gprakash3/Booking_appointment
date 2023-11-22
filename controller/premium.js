@@ -2,8 +2,9 @@ const Expense = require('../model/data');
 const User = require('../model/signup');
 const sequelize = require('../util/database');
 const jwt = require('jsonwebtoken');
-const env = require('dotenv');
 const Link = require('../model/downloadfilelink');
+
+require('dotenv').config()
 
 const AWS = require('aws-sdk');
 function uploadToS3(data, filename) {

@@ -1,6 +1,6 @@
 const Razorpay = require('razorpay');
 const Order = require('../model/order');
-
+require('dotenv').config()
 
 
 

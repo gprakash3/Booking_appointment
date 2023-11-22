@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
 const app = express();
 const path = require('path');
-const helmet = require('helmet');
+
 
 const morgan = require('morgan');
 const cors = require('cors');
@@ -16,16 +16,28 @@ const accessLogStream = fs.createWriteStream(
 );
 
 
-app.use(
-    helmet({
-      contentSecurityPolicy: false,
-    })
-  );
+// app.use(
+//     helmet({
+//       contentSecurityPolicy: false,
+//     })
+//   );
 
 
+
+// const csp = {
+//     directives: {
+//         defaultSrc: ["'self'"],
+//         imgSrc: ["'self'", "https://checkout.razorpay.com", "https://api.razorpay.com"],
+//         frameSrc: ["'self'", "https://checkout.razorpay.com", "https://api.razorpay.com", "https://lumberjack-cx.razorpay.com"],
+//         connectSrc: ["'self'", "https://lumberjack-cx.razorpay.com"],
+//         scriptSrc: ["'self'", "http://3.109.55.181:3000", "https://checkout.razorpay.com", "https://api.razorpay.com/", "https://api.razorpay.com/", "'nonce-2726c7f26c'"],
+//     },
+// };
+
+// app.use(helmet({
+//     contentSecurityPolicy: csp,
+// }));
 app.use(morgan('combined', { stream: accessLogStream }));
-
-
 
 require('dotenv').config()
 
@@ -54,6 +66,10 @@ app.use(purchaseRoute);
 app.use(premiumRoute);
 app.use(forgetPasswordRoute);
 app.use(reportRoute);
+
+app.use((req,res) => {
+    res.sendFile(path.join(__dirname, `public/login.html`));
+})
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

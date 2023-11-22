@@ -6,6 +6,8 @@ const rootDir = require('../util/path');
 
 const bcrypt=require('bcrypt');
 
+require('dotenv').config()
+
 exports.updatePassword = async(req,res,next) => {
     try{
     const password = req.body.password;
@@ -49,24 +51,18 @@ res.status(201).json({uuid:uuid, datas:resp});
         console.log(err);
         res.status(500).json({error:err, message:'Not able to create Request table'})
     }
-
 }
-
-
 
 
 exports.sendEmail = async (req, res, next) => {
     try {
         const Sib = require('sib-api-v3-sdk');
-
         require('dotenv').config();
-        // console.log(req.body.email);
 
         const client = Sib.ApiClient.instance;
         const apiKey = client.authentications['api-key'];
-        console.log(process.env);
-        console.log(process.env.API_KEY);
-        apiKey.apiKey =process.env.API_KEY;
+        
+        apiKey.apiKey =process.env.SIB_API_KEY;
 
         const transEmailApi = new Sib.TransactionalEmailsApi();
 
