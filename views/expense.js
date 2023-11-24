@@ -6,13 +6,13 @@ buypremium.addEventListener('click', async(e) => {
    console.log('clicked');
    e.preventDefault();
    const token=localStorage.getItem('token');
-   const res= await axios.get('http://3.109.55.181:3000/purchase/premiummembership',{headers:{"Authorization" : token}});
+   const res= await axios.get('http://65.0.125.89:3000/purchase/premiummembership',{headers:{"Authorization" : token}});
    console.log(res);
    var option = {
        "key":res.data.key_id,
        "orderid":res.data.order.id,
        "handler":async function(response){
-           await axios.post('http://3.109.55.181:3000/purchase/updatetransactionstatus',{
+           await axios.post('http://65.0.125.89:3000/purchase/updatetransactionstatus',{
                order_id:option.orderid,
                payment_id:res.razorpay_payment_id,
            },{headers:{"Authorization" : token}});
@@ -42,7 +42,7 @@ buypremium.addEventListener('click', async(e) => {
    async function addtodb(obj) {
        try {
            const token = localStorage.getItem('token');
-               const res = await axios.post('http://3.109.55.181:3000/addData', obj, {headers:{"Authorization" : token}});
+               const res = await axios.post('http://65.0.125.89:3000/addData', obj, {headers:{"Authorization" : token}});
                showonscreen(res.data.datas);
        }
        catch (err) {
@@ -72,7 +72,7 @@ buypremium.addEventListener('click', async(e) => {
        del.addEventListener('click', async(e) => {
            display.removeChild(div);
            const token = localStorage.getItem('token');
-           const data = await axios.post('http://3.109.55.181:3000/delete', obj, {headers:{"Authorization" : token}});
+           const data = await axios.post('http://65.0.125.89:3000/delete', obj, {headers:{"Authorization" : token}});
            console.log(data);
        })
 
@@ -108,7 +108,7 @@ buypremium.addEventListener('click', async(e) => {
        try {
            const token = localStorage.getItem('token');
            console.log(token);
-           const res = await axios.get('http://3.109.55.181:3000/getAllData', {headers:{"Authorization" : token}});
+           const res = await axios.get('http://65.0.125.89:3000/getAllData', {headers:{"Authorization" : token}});
            for (let i = 0; res.data.datas.length; i++) {
                showonscreen(res.data.datas[i]);
            }
