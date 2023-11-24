@@ -10,10 +10,10 @@ const morgan = require('morgan');
 const cors = require('cors');
 app.use(cors());
 
-const accessLogStream = fs.createWriteStream(
-    path.join(__dirname, 'access.log'),
-    { flags: 'a' }
-);
+// const accessLogStream = fs.createWriteStream(
+//     path.join(__dirname, 'access.log'),
+//     { flags: 'a' }
+// );
 
 
 // app.use(
@@ -37,7 +37,7 @@ const accessLogStream = fs.createWriteStream(
 // app.use(helmet({
 //     contentSecurityPolicy: csp,
 // }));
-app.use(morgan('combined', { stream: accessLogStream }));
+// app.use(morgan('combined', { stream: accessLogStream }));
 
 require('dotenv').config()
 
