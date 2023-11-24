@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "TOKEN_SECRET=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm5hbWUiOiJwcmFrYXNoIiwiaWF0IjoxNjk4MTU5MTQ4fQ.CTTL5Fwbs39FPWrIOx8Bo1SB1HxC6Pl_UJhDR8Eh0I8 RAZORPAY_KEY_ID=rzp_test_7W4rl9QajIyV4v RAZORPAY_KEY_SECRET=2xfG3gsx1eYgmKvSL8IF9r9l API_KEY=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 ACESSKEYID=AKIATWLISRMNJBOTHDAD SECRETACCESSKEY=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 node app.js",
+    "start": "node app.js",
     "start-server": "node app.js",
     "start:dev": "nodemon app.js"
   },
