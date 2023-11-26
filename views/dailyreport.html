@@ -68,7 +68,7 @@
             reportDateTime.innerHTML = `Report Generated At: ${date.toLocaleDateString()}`;
 
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:3000/premium/dailyreport`, { headers: { "Authorization": token } });
+            const res = await axios.get(`http://3.111.32.89:3000/premium/dailyreport`, { headers: { "Authorization": token } });
             console.log(res.data.datas);
             for(let i=0;i<res.data.datas.length;i++)
             {

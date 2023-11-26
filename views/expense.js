@@ -14,11 +14,11 @@
             console.log('clicked');
             //getting token from local storage
             const token = localStorage.getItem('token');
-            const res = await axios.get(`http://localhost:3000/download`, { headers: { "Authorization": token } });
+            const res = await axios.get(`http://3.111.32.89:3000/download`, { headers: { "Authorization": token } });
             console.log('response when clicked download file', res);
             //when response status is 200 then create element a and download file
             if (res.status === 200) {
-                const resp = await axios.post(`http://localhost:3000/postLink`, { link: res.data.fileUrl }, { headers: { "Authorization": token } });
+                const resp = await axios.post(`http://3.111.32.89:3000/postLink`, { link: res.data.fileUrl }, { headers: { "Authorization": token } });
                 console.log(resp);
                  var a = document.createElement('a');
                 a.href = res.data.fileUrl;
@@ -49,7 +49,7 @@
     async function addtodb(obj) {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post(`http://localhost:3000/addData`, obj, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://3.111.32.89:3000/addData`, obj, { headers: { "Authorization": token } });
             showonscreen(res.data.datas);
         }
         catch (err) {
@@ -83,7 +83,7 @@
         del.addEventListener('click', async (e) => {
             tbody.removeChild(row);
             const token = localStorage.getItem('token');
-            const data = await axios.post(`http://localhost:3000/delete`, obj, { headers: { "Authorization": token } });
+            const data = await axios.post(`http://3.111.32.89:3000/delete`, obj, { headers: { "Authorization": token } });
             console.log(data);
         })
     }
@@ -101,7 +101,7 @@
             const ePP = localStorage.getItem('expenseperpage');
             const token = localStorage.getItem('token');
             // console.log('token from html page is',token);
-            const resp = await axios.get(`http://localhost:3000/checkpremiumuser`, { headers: { "Authorization": token } })
+            const resp = await axios.get(`http://3.111.32.89:3000/checkpremiumuser`, { headers: { "Authorization": token } })
             const currentUser = document.getElementById('currentUser');
             currentUser.appendChild(document.createTextNode('Logged in as:'));
             currentUser.appendChild(document.createTextNode('\u00A0'));
@@ -134,7 +134,7 @@
                 </tbody>
             </table>`;
                     // document.getElementById('tbodyleaderboard').innerHTML = '';
-                    const res = await axios.get(`http://localhost:3000/premium/leaderboard`);
+                    const res = await axios.get(`http://3.111.32.89:3000/premium/leaderboard`);
                     // console.log(res.data);
                     for (let i = 0; i < res.data.datas.length; i++) {
                         showleaderboard(res.data.datas[i]);
@@ -148,15 +148,15 @@
 
                 const dailyReportbtn = document.getElementById('dailyReport');
                 dailyReportbtn.addEventListener('click', async (e) => {
-                    window.location.href = `http://localhost:3000/getdailyreportpage`;
+                    window.location.href = `http://3.111.32.89:3000/getdailyreportpage`;
                 });
                 const weeklyreportbtn = document.getElementById('weeklyReport');
                 weeklyreportbtn.addEventListener('click', (e) => {
-                    window.location.href = `http://localhost:3000/getweeklyreportpage`;
+                    window.location.href = `http://3.111.32.89:3000/getweeklyreportpage`;
                 })
                 const mothlyreportbtn = document.getElementById('monthlyReport');
                 mothlyreportbtn.addEventListener('click', (e) => {
-                    window.location.href = `http://localhost:3000/getmonthlyreportpage`;
+                    window.location.href = `http://3.111.32.89:3000/getmonthlyreportpage`;
                 })
                 document.getElementById('filesdownload').appendChild(document.createTextNode(`Download History: you can download again these files`));
 
@@ -180,13 +180,13 @@
                     console.log('clicked');
                     e.preventDefault();
                     const token = localStorage.getItem('token');
-                    const res = await axios.get(`http://localhost:3000/purchase/premiummembership`, { headers: { "Authorization": token } });
+                    const res = await axios.get(`http://3.111.32.89:3000/purchase/premiummembership`, { headers: { "Authorization": token } });
                     console.log('response after getting /purchase/premiummemb.', res);
                     var option = {
                         "key": res.data.key_id,
                         "orderid": res.data.order.id,
                         "handler": async function (response) {
-                            await axios.post(`http://localhost:3000/purchase/updatetransactionstatus`, {
+                            await axios.post(`http://3.111.32.89:3000/purchase/updatetransactionstatus`, {
                                 order_id: option.orderid,
                                 payment_id: response.razorpay_payment_id,
                             }, { headers: { "Authorization": token } });
@@ -200,7 +200,7 @@
                     //if payment failed then update database and alert user
                     rzp1.on('payment.failed', function (response) {
                         console.log(response);
-                        axios.post(`http://localhost:3000/purchase/updatetxnfailed`, {
+                        axios.post(`http://3.111.32.89:3000/purchase/updatetxnfailed`, {
                             order_id: option.orderid,
                             payment_id: 'Failed Payment',
                         }, { headers: { "Authorization": token } });
@@ -222,7 +222,7 @@
 
             //getting data as per page and numner of record per page
             const page = 1;
-            const res = await axios.post(`http://localhost:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://3.111.32.89:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
 
             for (let i = 0; i < res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
@@ -239,7 +239,7 @@
         try {
             const ePP = localStorage.getItem('expenseperpage');
             const token = localStorage.getItem('token');
-            const res = await axios.post(`http://localhost:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://3.111.32.89:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
             for (let i = 0; i < res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
@@ -305,7 +305,7 @@
         try {
             const token = localStorage.getItem('token');
             const fileslinks = document.getElementById('downloadfilelinks');
-            const res = await axios.get(`http://localhost:3000/getFileLinks`, { headers: { "Authorization": token } });
+            const res = await axios.get(`http://3.111.32.89:3000/getFileLinks`, { headers: { "Authorization": token } });
             console.log(res.data);
             if (res.data.alllinks.length > 0) {
                 for (let i = 0; i < res.data.alllinks.length; i++) {
