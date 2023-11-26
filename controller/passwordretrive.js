@@ -6,7 +6,6 @@ const rootDir = require('../util/path');
 
 const bcrypt=require('bcrypt');
 
-require('dotenv').config()
 
 exports.updatePassword = async(req,res,next) => {
     try{
@@ -82,10 +81,11 @@ exports.sendEmail = async (req, res, next) => {
         })
         console.log(promise);
         res.status(201).json({message:'Email sent', datas:promise});
+ 
 
     }
     catch (err) {
         console.log(err);
-        res.status(500).json({error:err, message:'Not able to send email'})
+        res.status(500).json({error:err, message:'Not able to send email, error in API part'})
     }
 }

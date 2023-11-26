@@ -2,6 +2,7 @@
 const Expense = require('../model/data');
 const User = require('../model/signup');
 const sequelize = require('../util/database');
+require('dotenv').config()
 
 //adding data to database
 exports.postData = async (req, res, next) => {
@@ -78,7 +79,7 @@ exports.checkPremiumUser = async (req, res, next) => {
 
 exports.getExpenses = async(req,res,next) => {
     try{
-        const expensePerPage = req.body.expensePerPage;
+        const expensePerPage = req.body.expensePerPage || 5;
         const page = +req.query.page || 1;
         const user = req.user;
         const count=await Expense.count({where: { userId: req.user.id }});

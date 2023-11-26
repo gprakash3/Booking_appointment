@@ -49,14 +49,15 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
-    window.addEventListener('DOMContentLoaded', async () => {
+       
+       window.addEventListener('DOMContentLoaded', async () => {
         try {
             const reportDateTime = document.getElementById('reportDateTime');
             const date = new Date();
             reportDateTime.innerHTML = `Report Generated At: ${date.toLocaleDateString()}`;
 
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://65.0.125.89:3000/premium/dailyreport', { headers: { "Authorization": token } });
+            const res = await axios.get(`http://localhost:3000/premium/dailyreport`, { headers: { "Authorization": token } });
             console.log(res.data.datas);
             showreport(res.data.datas);
         }
@@ -134,5 +135,4 @@
     }
 
 </script>
-
 </html>

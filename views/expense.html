@@ -14,7 +14,7 @@
             width: 100%;
             /* flex-wrap: wrap; */
             /* justify-content: space-evenly; */
-            
+
             /* align-items: stretch; */
         }
 
@@ -34,15 +34,30 @@
         }
 
         .expenseform {
-            margin: 13px 77px;
-            padding: 9px 8px;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            padding: 0.2rem 0.3rem;
             border: 1px solid black;
-            display: inline-block;
+            display: flex;
             text-align: center;
-            width: 28%;
+            width: 73%;
             background-clip: content-box;
             background-color: #d6f3a9;
             border-radius: 5px;
+        }
+
+        .box {
+            width: fit-content;
+        }
+
+        .box input,
+        label, select {
+            text-align: center;
+            display: block;
+            width: fit-content;
+            margin-left: 1rem;
+            border-radius: 4px;
         }
 
         #dataarea {
@@ -98,12 +113,6 @@
         </div>
         <div class="mid" style="width: 30%;">
             <div id="navbar">
-                <!-- <li><a href="http://65.0.125.89:3000/premium/dailyreport">Daily Expense Report</a> </li>
-                <li><a href="http://65.0.125.89:3000/premium/weeklyreport">Weekly expense report</a> </li>
-                <li><a href="http://65.0.125.89:3000/premium/monthlyReport">Monthly Expense report</a> </li> -->
-                <!-- <button type="submit" id="dailyReport">Daily Report</button>
-                <button type="submit" id="weeklyReport">Weekly Report</button>
-                <button type="submit" id="monthlyReport">Monthly Report</button> -->
 
             </div>
         </div>
@@ -121,14 +130,14 @@
                         <label class="forms" for="desc">Description:</label>
                         <input class="forms" type="text" id="desc" name="desc"><br>
                         <label class="forms" for="sel">Choose category:</label>
-                        <select name="sel" id="sel">
+                        <select name="sel" id="sel" style="width: -webkit-fill-available">
                             <option>Fuel</option>
                             <option>Food</option>
                             <option>Electricity</option>
                             <option>Movie</option>
                         </select>
-
-                        <input type="submit" id="submitbtn" value="Add Expense">
+                        <br>
+                        <input type="submit" id="submitbtn" value="Add Expense" style="width: -webkit-fill-available;">
                     </div>
                 </div>
             </div>
@@ -140,7 +149,7 @@
     <div id="dataarea">
         <div id="selectePP" style="position: absolute; right: 2rem;">
             select Number of Expense Per Page
-            <select name="ePP" id="ePP" value="5">
+            <select name="ePP" id="ePP" placeholder="5">
                 <option>5</option>
                 <option>10</option>
                 <option>25</option>
@@ -170,7 +179,7 @@
 
         </div>
         <div id="pagination">
-            
+
         </div>
         <button type="submit" id="downloadreport" style="margin: 2rem;">Download File</button>
         <div id="filesdownload"> </div>
@@ -181,16 +190,16 @@
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
-<script >
-    
+<script>
+
     const pagination = document.getElementById('pagination');
     const downloadreportbtn = document.getElementById('downloadreport');
     //function perform on selecting the value of expense per page value
     document.getElementById('ePP').addEventListener('click', () => {
         const expensePerPage = document.getElementById('ePP').value;
-    localStorage.setItem('expenseperpage', expensePerPage);
+        localStorage.setItem('expenseperpage', expensePerPage);
     })
-    
+
     //function performed on clicking download button
     downloadreportbtn.addEventListener('click', async (e) => {
         try {
@@ -198,13 +207,13 @@
             console.log('clicked');
             //getting token from local storage
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://65.0.125.89:3000/download', { headers: { "Authorization": token } });
+            const res = await axios.get(`http://localhost:3000/download`, { headers: { "Authorization": token } });
             console.log('response when clicked download file', res);
             //when response status is 200 then create element a and download file
             if (res.status === 200) {
-                const resp = await axios.post('http://65.0.125.89:3000/postLink', { link: res.data.fileUrl }, { headers: { "Authorization": token } });
+                const resp = await axios.post(`http://localhost:3000/postLink`, { link: res.data.fileUrl }, { headers: { "Authorization": token } });
                 console.log(resp);
-                 var a = document.createElement('a');
+                var a = document.createElement('a');
                 a.href = res.data.fileUrl;
                 a.download = 'myexpense.csv';
                 a.click();
@@ -233,7 +242,7 @@
     async function addtodb(obj) {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://65.0.125.89:3000/addData', obj, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://localhost:3000/addData`, obj, { headers: { "Authorization": token } });
             showonscreen(res.data.datas);
         }
         catch (err) {
@@ -267,7 +276,7 @@
         del.addEventListener('click', async (e) => {
             tbody.removeChild(row);
             const token = localStorage.getItem('token');
-            const data = await axios.post('http://65.0.125.89:3000/delete', obj, { headers: { "Authorization": token } });
+            const data = await axios.post(`http://localhost:3000/delete`, obj, { headers: { "Authorization": token } });
             console.log(data);
         })
     }
@@ -285,7 +294,7 @@
             const ePP = localStorage.getItem('expenseperpage');
             const token = localStorage.getItem('token');
             // console.log('token from html page is',token);
-            const resp = await axios.get('http://65.0.125.89:3000/checkpremiumuser', { headers: { "Authorization": token } })
+            const resp = await axios.get(`http://localhost:3000/checkpremiumuser`, { headers: { "Authorization": token } })
             const currentUser = document.getElementById('currentUser');
             currentUser.appendChild(document.createTextNode('Logged in as:'));
             currentUser.appendChild(document.createTextNode('\u00A0'));
@@ -318,7 +327,7 @@
                 </tbody>
             </table>`;
                     // document.getElementById('tbodyleaderboard').innerHTML = '';
-                    const res = await axios.get('http://65.0.125.89:3000/premium/leaderboard');
+                    const res = await axios.get(`http://localhost:3000/premium/leaderboard`);
                     // console.log(res.data);
                     for (let i = 0; i < res.data.datas.length; i++) {
                         showleaderboard(res.data.datas[i]);
@@ -332,15 +341,15 @@
 
                 const dailyReportbtn = document.getElementById('dailyReport');
                 dailyReportbtn.addEventListener('click', async (e) => {
-                    window.location.href = "http://65.0.125.89:3000/getdailyreportpage";
+                    window.location.href = `http://localhost:3000/getdailyreportpage`;
                 });
                 const weeklyreportbtn = document.getElementById('weeklyReport');
                 weeklyreportbtn.addEventListener('click', (e) => {
-                    window.location.href = 'http://65.0.125.89:3000/getweeklyreportpage';
+                    window.location.href = `http://localhost:3000/getweeklyreportpage`;
                 })
                 const mothlyreportbtn = document.getElementById('monthlyReport');
                 mothlyreportbtn.addEventListener('click', (e) => {
-                    window.location.href = 'http://65.0.125.89:3000/getmonthlyreportpage';
+                    window.location.href = `http://localhost:3000/getmonthlyreportpage`;
                 })
                 document.getElementById('filesdownload').appendChild(document.createTextNode(`Download History: you can download again these files`));
 
@@ -357,20 +366,20 @@
                 button.type = 'submit';
                 button.innerHTML = 'Buy Premium';
                 premdisplay.appendChild(button);
-                
+
                 const buypremium = document.getElementById('buypremium');
                 //function perfomed on clicking buy premium button
                 buypremium.addEventListener('click', async (e) => {
                     console.log('clicked');
                     e.preventDefault();
                     const token = localStorage.getItem('token');
-                    const res = await axios.get('http://65.0.125.89:3000/purchase/premiummembership', { headers: { "Authorization": token } });
+                    const res = await axios.get(`http://localhost:3000/purchase/premiummembership`, { headers: { "Authorization": token } });
                     console.log('response after getting /purchase/premiummemb.', res);
                     var option = {
                         "key": res.data.key_id,
                         "orderid": res.data.order.id,
                         "handler": async function (response) {
-                            await axios.post('http://65.0.125.89:3000/purchase/updatetransactionstatus', {
+                            await axios.post(`http://localhost:3000/purchase/updatetransactionstatus`, {
                                 order_id: option.orderid,
                                 payment_id: response.razorpay_payment_id,
                             }, { headers: { "Authorization": token } });
@@ -384,7 +393,7 @@
                     //if payment failed then update database and alert user
                     rzp1.on('payment.failed', function (response) {
                         console.log(response);
-                        axios.post('http://65.0.125.89:3000/purchase/updatetxnfailed', {
+                        axios.post(`http://localhost:3000/purchase/updatetxnfailed`, {
                             order_id: option.orderid,
                             payment_id: 'Failed Payment',
                         }, { headers: { "Authorization": token } });
@@ -402,13 +411,12 @@
             //     document.getElementById('tbodydtde').innerHTML = 'No Data to display';
             // }
             //displaying number as selected before
-            document.getElementById('ePP').value =ePP;
+            document.getElementById('ePP').value = ePP;
 
             //getting data as per page and numner of record per page
             const page = 1;
-            const res = await axios.post(`http://65.0.125.89:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://localhost:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
 
-            // const res = await axios.get('http://65.0.125.89:3000/getAllData', { headers: { "Authorization": token } });
             for (let i = 0; i < res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
@@ -424,7 +432,7 @@
         try {
             const ePP = localStorage.getItem('expenseperpage');
             const token = localStorage.getItem('token');
-            const res = await axios.post(`http://65.0.125.89:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
+            const res = await axios.post(`http://localhost:3000/getPageData?page=${page}`, { expensePerPage: ePP }, { headers: { "Authorization": token } });
             for (let i = 0; i < res.data.datas.length; i++) {
                 showonscreen(res.data.datas[i]);
             }
@@ -490,7 +498,7 @@
         try {
             const token = localStorage.getItem('token');
             const fileslinks = document.getElementById('downloadfilelinks');
-            const res = await axios.get('http://65.0.125.89:3000/getFileLinks', { headers: { "Authorization": token } });
+            const res = await axios.get(`http://localhost:3000/getFileLinks`, { headers: { "Authorization": token } });
             console.log(res.data);
             if (res.data.alllinks.length > 0) {
                 for (let i = 0; i < res.data.alllinks.length; i++) {
@@ -502,6 +510,7 @@
             console.log(err);
         }
     }
+
 </script>
 
 </html>

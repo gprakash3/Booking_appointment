@@ -25,6 +25,12 @@
         <div style="text-align: left;" id="reportDateTime"></div>
         <div style="position: absolute; right: 10px;"><a href="/expense">Return to homepage</a></div>
     </div>
+    <div id="year">
+        <h1></h1>
+    </div>
+    <div id="monthyear">
+        <h1></h1>
+    </div>
     <div id="weeklyReport">
         <table border="2" width="100%" id="monthlyReportTable">
             <col style="width:50%">
@@ -54,21 +60,18 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
-
-    window.addEventListener('DOMContentLoaded', async () => {
+       
+       window.addEventListener('DOMContentLoaded', async () => {
         try {
             const reportDateTime = document.getElementById('reportDateTime');
             const date = new Date();
             reportDateTime.innerHTML = `Report Generated At: ${date.toLocaleDateString()}`;
 
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://65.0.125.89:3000/premium/dailyreport', { headers: { "Authorization": token } });
+            const res = await axios.get(`http://localhost:3000/premium/dailyreport`, { headers: { "Authorization": token } });
             console.log(res.data.datas);
             showreport(res.data.datas);
-            // for (let i = 0; i < res.data.datas.length; i++) {
-
-            //     showleaderboard(res.data.datas[i]);
-            // }
+            
 
         }
         catch (err) {
@@ -152,6 +155,7 @@
         row.appendChild(cell4);
         tbody.appendChild(row);
     }
+
 </script>
 
 </html>

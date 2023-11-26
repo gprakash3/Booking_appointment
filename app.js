@@ -30,7 +30,7 @@ app.use(cors());
 //         imgSrc: ["'self'", "https://checkout.razorpay.com", "https://api.razorpay.com"],
 //         frameSrc: ["'self'", "https://checkout.razorpay.com", "https://api.razorpay.com", "https://lumberjack-cx.razorpay.com"],
 //         connectSrc: ["'self'", "https://lumberjack-cx.razorpay.com"],
-//         scriptSrc: ["'self'", "http://65.0.125.89:3000", "https://checkout.razorpay.com", "https://api.razorpay.com/", "https://api.razorpay.com/", "'nonce-2726c7f26c'"],
+//         scriptSrc: ["'self'", "http://process.env.VARIABLE_IP:3000", "https://checkout.razorpay.com", "https://api.razorpay.com/", "https://api.razorpay.com/", "'nonce-2726c7f26c'"],
 //     },
 // };
 

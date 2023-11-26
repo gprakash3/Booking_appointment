@@ -2,6 +2,7 @@ const User = require('../model/signup');
 const path=require('path');
 const rootDir = require('../util/path');
 const sequelize = require('../util/database');
+require('dotenv').config()
 
 exports.getdailyreportpage = (req,res,next) => {
     res.sendFile(path.join(rootDir, 'views', 'dailyreport.html'));

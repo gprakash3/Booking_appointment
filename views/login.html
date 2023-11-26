@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <link rel="stylesheet" href="/form.css">
 
@@ -73,17 +73,17 @@
 </body>
 <script  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 <script>
-   const subbtn=document.getElementById('subbtn');
+    const subbtn=document.getElementById('subbtn');
    subbtn.addEventListener('click', async (e) => {
         try {
             e.preventDefault();
             const display = document.getElementById('display');
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            let res = await axios.post(`http://65.0.125.89:3000/user/login/check`, { email: email, password: password });
+            let res = await axios.post(`http://localhost:3000/user/login/check`, { email: email, password: password });
             display.innerHTML = 'User Successfully logged in';
             localStorage.setItem('token', res.data.token);
-            window.location.href = "http://65.0.125.89:3000/expense";
+            window.location.href = `http://localhost:3000/expense`;
         }
         catch (err) {
             const display = document.getElementById('display');
@@ -92,7 +92,5 @@
             display.innerHTML = `${err.response.data.userdata}`;
         }
     })
-
 </script>
-
 </html>

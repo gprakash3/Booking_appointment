@@ -3,7 +3,7 @@ const jwt=require('jsonwebtoken');
 
 const path=require('path');
 const rootDir = require('../util/path');
-
+require('dotenv').config()
 const bcrypt=require('bcrypt');
 
 exports.getForgetPasswordPage = (req,res,next) => {
